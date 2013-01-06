@@ -2,7 +2,7 @@ import pylibmc
 import multiprocessing
 
 # multithreading wrapper for pylibmc to hide pooling and provide a clean interface
-class pylibmc_mt(): 
+class Client(): 
     def __init__(self, servers, binary=False, behaviors=None, username=None, password=None):
         self.behaviors = behaviors
         self.mc_client = pylibmc.Client(servers=servers, binary=binary, behaviors=behaviors, 
