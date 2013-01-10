@@ -50,9 +50,16 @@ class Client():
             else:
                 return mc.set_multi(mapping, time, key_prefix)
 
-    def delete(self, key, time=0):
+    def add(self, key, value, time=0, min_compress_len=0):
         with self.pool.reserve() as mc:
-            return mc.delete(key,time)
+            return mc.add(key, value, time, min_compress_len)
+
+    def add_multi(self, mapping, time=0, key_prefix=None):
+        with self.pool.reserve() as mc:
+            if key_prefix:
+                return mc.add_multi(mapping, time, key_prefix)
+            else:
+                return mc.add_multi(mapping, time)
 
     def replace(self, value, time=0, min_compress_len=0):
         with self.pool.reserve() as mc:
@@ -62,15 +69,35 @@ class Client():
         with self.pool.reserve() as mc:
             return mc.append(key, value)
 
+    def prepend(self, key, value):
+        with self.pool.reserve() as mc:
+            return mc.prepend(key, value)
+
     def incr(self, key, delta=1):
         with self.pool.reserve() as mc:
             return mc.incr(key, delta)
+
+    def incr_multi(self, keys, delta=1, key_prefix=''):
+        with self.pool.reserve() as mc:
+            return mc.incr_multi(keys, delta = delta, key_prefix = key_prefix)
 
     def decr(self, key, delta=1):
         with self.pool.reserve() as mc:
             return mc.decr(key, delta)
 
-    def delete_multi(keys, time=0, key_prefix=None):
+    def gets(self, key):
+        with self.pool.reserve() as mc:
+            return mc.gets(key)
+
+    def cas(self, key, value, time=0):
+        with self.pool.reserve() as mc:
+            return mc.cas(key, value, time)
+
+    def delete(self, key):
+        with self.pool.reserve() as mc:
+            return mc.delete(key)
+
+    def delete_multi(self, keys, time=0, key_prefix=None):
         with self.pool.reserve() as mc:
             if key_prefix == None:
                 return mc.delete_multi(keys, time)
