@@ -14,10 +14,10 @@ class Client():
             return key in mc
 
     def __getitem__(self, key): 
-        return self.get(key=key)
+        return self.get(key)
 
     def __setitem__(self, key, value):
-        return self.set(key=key, value=value)
+        return self.set(key, value)
 
     def __delitem__(self, key):
         return self.delete(key)
@@ -37,33 +37,33 @@ class Client():
             if key_prefix == None:
                 return mc.get_multi(keys)
             else:
-                return mc.get_multi(keys, key_prefix)
+                return mc.get_multi(keys, key_prefix = key_prefix)
 
     def set(self, key, value, time=0, min_compress_len=0):
         with self.pool.reserve() as mc:
-            return mc.set(key, value, time, min_compress_len)
+            return mc.set(key, value, time = time, min_compress_len = min_compress_len)
 
     def set_multi(self, mapping, time=0, key_prefix=None):
         with self.pool.reserve() as mc:
             if key_prefix == None:
                 return mc.set_multi(mapping, time)
             else:
-                return mc.set_multi(mapping, time, key_prefix)
+                return mc.set_multi(mapping, time, key_prefix = key_prefix)
 
     def add(self, key, value, time=0, min_compress_len=0):
         with self.pool.reserve() as mc:
-            return mc.add(key, value, time, min_compress_len)
+            return mc.add(key, value, time, min_compress_len = min_compress_len)
 
     def add_multi(self, mapping, time=0, key_prefix=None):
         with self.pool.reserve() as mc:
             if key_prefix:
-                return mc.add_multi(mapping, time, key_prefix)
+                return mc.add_multi(mapping, time, key_prefix = key_prefix)
             else:
                 return mc.add_multi(mapping, time)
 
     def replace(self, value, time=0, min_compress_len=0):
         with self.pool.reserve() as mc:
-            return mc.replace(value, time, min_compress_len)
+            return mc.replace(value, time = time, min_compress_len = min_compress_len)
 
     def append(self, key, value):
         with self.pool.reserve() as mc:
@@ -83,7 +83,7 @@ class Client():
 
     def decr(self, key, delta=1):
         with self.pool.reserve() as mc:
-            return mc.decr(key, delta)
+            return mc.decr(key, delta = delta)
 
     def gets(self, key):
         with self.pool.reserve() as mc:
@@ -91,7 +91,7 @@ class Client():
 
     def cas(self, key, value, time=0):
         with self.pool.reserve() as mc:
-            return mc.cas(key, value, time)
+            return mc.cas(key, value, time = time)
 
     def delete(self, key):
         with self.pool.reserve() as mc:
@@ -102,7 +102,7 @@ class Client():
             if key_prefix == None:
                 return mc.delete_multi(keys, time)
             else:
-                return mc.delete_multi(keys, time, key_prefix)
+                return mc.delete_multi(keys, time, keyprefix = key_prefix)
 
     def flush_all(self):
         with self.pool.reserve() as mc:
