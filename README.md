@@ -13,3 +13,5 @@ The syntax is completely equal to pylibmc so that you don't have to refactor any
         return mc.get('key') 
 
 The example shows that it's safe to operate on the memcached object even on a multithreaded server with concurrent calls to `get_key`.
+
+One thing to note is that pylibmc_mt sorts the given server names to guarantee equal hashing across all clients.
