@@ -9,9 +9,12 @@ import multiprocessing
 class Client(): 
     def __init__(self, servers, binary=False, behaviors=None, username=None, password=None):
         self.behaviors = behaviors
+        # we are sorting server names to guarantee equal key hashing across clients
+        servers.sort()
         self.mc_client = pylibmc.Client(servers=servers, binary=binary, behaviors=behaviors, 
                                             username=username, password=password)
-        self.pool = pylibmc.ClientPool(mc=self.mc_client,n_slots=multiprocessing.cpu_count() * 2) # profiling needed, IO dependant 
+        # profiling needed, IO dependent
+        self.pool = pylibmc.ClientPool(mc=self.mc_client,n_slots=multiprocessing.cpu_count() * 2) 
 
     def __contains__(self, key):
         with self.pool.reserve() as mc:
